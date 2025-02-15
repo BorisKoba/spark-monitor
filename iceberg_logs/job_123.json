@@ -1,0 +1,1 @@
+{"job_id": "job_123", "run_length": 300, "executor_count": 5, "operators": ["Read CSV", "Filter", "Sort"], "errors": [], "operator_lengths": [50, 100, 150]}

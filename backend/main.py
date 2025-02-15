@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from backend.models import SparkJobLog
 import pyiceberg
 import os
 import json
