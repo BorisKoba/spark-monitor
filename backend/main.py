@@ -9,7 +9,17 @@ app = FastAPI()
 
 iceberg_file_path = "./iceberg_logs"
 os.makedirs(iceberg_file_path, exist_ok=True)
-
+@app.get("/logs/")
+async def get_logs():
+    logs = []
+    try:
+        for filename in os.listdir(iceberg_file_path):
+            if filename.endswith(".json"):
+                with open(os.path.join(iceberg_file_path, filename), "r") as f:
+                    logs.append(json.load(f)) 
+        return logs
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}")
 @app.post("/submit_log/")
 async def submit_log(log: SparkJobLog):
     log_data = log.dict()   
