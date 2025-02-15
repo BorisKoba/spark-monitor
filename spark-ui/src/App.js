@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LogsTable from "./LogsTable";
 import Loading from "./Loading";
+import "./App.css";
 
 function App() {
 	const [logs, setLogs] = useState([]);

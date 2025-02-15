@@ -1,14 +1,23 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from backend.models import SparkJobLog
-import pyiceberg
 import os
 import json
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 iceberg_file_path = "./iceberg_logs"
 os.makedirs(iceberg_file_path, exist_ok=True)
+
 @app.get("/logs/")
 async def get_logs():
     logs = []
@@ -20,6 +29,7 @@ async def get_logs():
         return logs
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}")
+
 @app.post("/submit_log/")
 async def submit_log(log: SparkJobLog):
     log_data = log.dict()   
