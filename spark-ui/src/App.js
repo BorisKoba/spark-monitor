@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import LogsTable from "./LogsTable";
+import Loading from "./Loading";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [logs, setLogs] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		axios.get("http://localhost:8000/logs/")
+			.then(response => {
+				setLogs(response.data);
+				setLoading(false);
+			})
+			.catch(error => {
+				console.error("Error fetching logs:", error);
+				setLoading(false);
+			});
+	}, []);
+
+	return (
+		<div>
+			<h1>Spark Job Logs</h1>
+			{loading ? <Loading /> : <LogsTable logs={logs} />}
+		</div>
+	);
 }
 
 export default App;
